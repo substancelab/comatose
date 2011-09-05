@@ -30,6 +30,6 @@ require 'support/route_mapper'
 #require 'dispatcher' unless defined?(::Dispatcher)
 #ActionController::Dispatcher.to_prepare is deprecated. " <<
 #          "Please use config.to_prepare instead
-ActionDispatch::Callbacks.to_prepare :comatose do
+ActionDispatch::Callbacks.to_prepare  do
     Comatose.config.after_setup.call
 end

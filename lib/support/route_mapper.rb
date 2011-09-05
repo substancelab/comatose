@@ -1,5 +1,5 @@
 require 'action_dispatch/routing/mapper'
-require 'action_dispatch/routing/deprecated_mapper'
+#require 'action_dispatch/routing/deprecated_mapper'
 require 'rails'
 # For use with 'Edge Rails'
 ActionDispatch::Routing::Mapper.class_eval do
