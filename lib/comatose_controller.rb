@@ -79,7 +79,7 @@ protected
     # TODO: Automatic support for page RSS feeds... ????
     if page_name.nil? or page_name.empty?
       page_name = params[:index]
-      params[:cache_path] = "#{request.request_uri}/index"
+      params[:cache_path] = "#{request.fullpath}/index"
     elsif !params[:index].empty?
       page_name = "#{params[:index]}/#{page_name}"
     end
