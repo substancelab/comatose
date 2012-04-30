@@ -1,8 +1,20 @@
 require 'rake'
 require 'rake/tasklib'
 require 'rake/testtask'
-require 'rake/rdoctask'
-require 'test/behaviors'
+#require 'rdoc/task'
+#require 'test/behaviors'
+require 'rubygems'
+require 'rake'
+require 'echoe'
+
+Echoe.new('comatose', '0.0.1') do |p|
+  p.description    = "Comatose is a micro CMS designed for being embedded into existing Rails 3 applications."
+  p.url            = "http://github.com/niciliketo/comatose"
+  p.author         = "Nic Martin"
+  p.email          = "niciliketo@gmail.com"
+  p.ignore_pattern = ["tmp/*", "script/*"]
+  p.development_dependencies = []
+end
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -14,9 +26,9 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = false
 end
 
-Behaviors::ReportTask.new :specs do |t|
-  t.pattern = 'test/**/*_test.rb'
-end
+#Behaviors::ReportTask.new :specs do |t|
+#  t.pattern = 'test/**/*_test.rb'
+#end
 
 desc 'Generate documentation for Comatose.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
@@ -46,7 +58,7 @@ desc "Update GEMSPEC"
 task :gemspec=>:manifest do
   $: << 'lib'
   require 'comatose/version'
-  
+
   gemspec_src =<<-EOGS
 # Generated on #{ Time.now.to_s }
 Gem::Specification.new do |s|
@@ -69,11 +81,11 @@ Gem::Specification.new do |s|
   #s.add_dependency("mime-types", ["> 0.0.0"])
 end
 EOGS
-  
+
   File.open("comatose.gemspec", 'w') do |f|
     f.write gemspec_src
   end
-  
+
   puts "Update GEMSPEC"
 end
 
@@ -95,7 +107,7 @@ task :build do
   layout_contents = ''
   # Customizable Target
   customizable_path = File.join('views', 'layouts', 'comatose_admin_customize.html.erb')
-  
+
   # Read the file contents...
   File.open(script_path, 'r') {|f| script_contents = "<script>\n#{f.read}\n</script>" }
   File.open(style_path, 'r')  {|f| style_contents = "<style>\n#{f.read}\n</style>" }
@@ -103,20 +115,20 @@ task :build do
 
   # Create the final layout...
   layout_contents = ERB.new( tmpl_contents ).result(binding)
-  
+
   # Write it out...
   File.open(layout_path, 'w') {|f| f.write layout_contents }
-  
+
   # Now let's create the customizable one...
   style_contents = "<%= stylesheet_link_tag 'comatose_admin' %>"
   script_contents = "<%= javascript_include_tag 'comatose_admin' %>"
-  
+
   # Create the final layout...
   layout_contents = ERB.new( tmpl_contents ).result(binding)
-  
+
   # Write it out...
   File.open(customizable_path, 'w') {|f| f.write layout_contents }
-  
+
   # That's it -- we're done.
   puts "Finished."
 end
@@ -153,7 +165,7 @@ task :test_harness do
   run_sh "cp #{ target / 'db' / 'development.sqlite3' } #{target / 'db' / 'test.sqlite3'}"
   run_sh "rm #{ target / 'public' / 'index.html' }"
   run_sh "cp #{ comatose_plugin_path / 'views' / 'layouts' / 'comatose_content.html.erb' } #{ target / 'app' / 'views' / 'layouts' / 'comatose_content.html.erb' }"
-  
+
   # Remove me soon!
   run_sh "cd #{ target } && ruby #{ target / 'script' / 'plugin' } install acts_as_tree"
   run_sh "cd #{ target } && ruby #{ target / 'script' / 'plugin' } install acts_as_list"
