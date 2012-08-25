@@ -20,9 +20,8 @@ class ComatoseAdminController < ActionController::Base
     @page = ComatosePage.find params[:id]
     @root_pages = [fetch_root_page].flatten
     if request.put?
-      @page.update_attributes(params[:page])
-      @page.updated_on = Time.now
-      @page.author = fetch_author_name
+      params[:page][:updated_on] = Time.now
+      params[:page][:author] = fetch_author_name
       if @page.save
         expire_cms_page @page
         expire_cms_fragment @page
@@ -398,4 +397,3 @@ logger.debug "BBBBBBBBBBBBBBBBBBB"
   end
 
 end
-
