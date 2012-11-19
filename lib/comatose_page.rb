@@ -127,7 +127,6 @@ protected
 
   # Caches old path (before save) for comparison later
   def cache_full_path
-  debugger
     @old_full_path = self.full_path
   end
 
