@@ -1,6 +1,9 @@
 
 module Comatose
-
+  class Engine < Rails::Engine
+    # Mimic old vendored plugin behavior, marc_display/lib is autoloaded.
+    config.autoload_paths << File.expand_path("..", __FILE__)
+  end
   # DEPRECATED
   # Loads extensions from Rails.root/lib/comatose/*.rb
   def self.load_extensions

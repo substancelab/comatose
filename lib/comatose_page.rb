@@ -13,7 +13,7 @@
 #  - created_on
 class ComatosePage < ActiveRecord::Base
 
-  set_table_name 'comatose_pages'
+  self.table_name = 'comatose_pages'
 
   # Only versions the content... Not all of the meta data or position
   acts_as_versioned :table_name=>'comatose_page_versions', :if_changed => [:title, :slug, :keywords, :body]

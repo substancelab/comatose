@@ -1,2 +1,2 @@
-require 'comatose'
+#require 'comatose'
 

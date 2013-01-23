@@ -1,5 +1,5 @@
 class ComatosePage < ActiveRecord::Base
-  set_table_name 'comatose_pages'
+  self.table_name = 'comatose_pages'
   acts_as_versioned :table_name=>'comatose_page_versions', :if_changed => [:title, :slug, :keywords, :body]
 end
 

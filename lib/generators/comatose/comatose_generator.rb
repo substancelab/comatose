@@ -1,6 +1,6 @@
  # lib/generators/authr/comatose/comatose_generator.rb
  require 'rails/generators'
- require 'rails/generators/migration'     
+ require 'rails/generators/migration'
 
 class ComatoseGenerator < Rails::Generators::Base
 	include Rails::Generators::Migration
@@ -32,7 +32,7 @@ class ComatoseGenerator < Rails::Generators::Base
 end
 
 class ComatosePage < ActiveRecord::Base
-  set_table_name 'comatose_pages'
+  set.table_name = 'comatose_pages'
   acts_as_versioned :table_name=>'comatose_page_versions', :if_changed => [:title, :slug, :keywords, :body]
 end
 
