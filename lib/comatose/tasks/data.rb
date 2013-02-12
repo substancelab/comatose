@@ -6,7 +6,7 @@ namespace :comatose do
   # Data Migration Tasks
   #
   namespace :data do
-    
+
     def page_to_hash(page)
       data = page.attributes.clone
       # Pull out the specific, or unnecessary fields
@@ -22,19 +22,21 @@ namespace :comatose do
 
     def hash_to_page_tree(hsh, page)
       child_ary = hsh.delete 'children'
+      puts hsh.to_yaml
+      puts hsh.keys
       page.update_attributes(hsh)
       page.save
       child_ary.each do |child_hsh|
         if child_pg = page.children.find_by_slug( child_hsh['slug'] )
           hash_to_page_tree( child_hsh, child_pg )
         else
-          hash_to_page_tree( child_hsh, page.children.create )      
+          hash_to_page_tree( child_hsh, page.children.create )
         end
       end if child_ary
     end
 
     desc "Saves a page tree from page FROM or '' to file TO_FILE or db/comatose-pages.yml"
-    task :export do 
+    task :export do
       require "#{Rails.root.to_s}/config/environment"
 
       root = ENV['FROM'] || ''
@@ -42,17 +44,17 @@ namespace :comatose do
       # Nested hash of the page tree...
       from = ComatosePage.find_by_path(root)
       if from
-        data = page_to_hash( from ) 
+        data = page_to_hash( from )
         File.open(target, 'w') {|f| f.write data.to_yaml }
       else
-        puts "Could not find the page at '#{root}', export aborted!"      
+        puts "Could not find the page at '#{root}', export aborted!"
       end
 
       puts "Finished."
     end
 
     desc "Loads page tree data FROM_FILE or db/comatose-pages.yml in to TO or ComatosePage.root"
-    task :import do 
+    task :import do
       require "#{Rails.root.to_s}/config/environment"
 
       src = ENV['FROM_FILE'] || 'db/comatose-pages.yml'
