@@ -22,8 +22,6 @@ namespace :comatose do
 
     def hash_to_page_tree(hsh, page)
       child_ary = hsh.delete 'children'
-      puts hsh.to_yaml
-      puts hsh.keys
       page.update_attributes(hsh)
       page.save
       child_ary.each do |child_hsh|
