@@ -51,6 +51,17 @@ class Comatose::ProcessingContext
     binding
   end
 
+  # Provide support for the rails asset pipeline image tag
+  # Use this in your erb template: <$ image_tag('assets/sprite.png' %>
+  def image_tag(input)
+    r = ActionController::Base.helpers
+    r.config.asset_host ||=ComatoseController.config.asset_host
+    r.image_tag(input)
+  rescue
+    #puts "Oops! -- #{$!}"
+    "<img/>"
+  end
+
   def method_missing(method_id, *args)
     method_name = method_id.to_s
     if @locals.has_key? method_name
