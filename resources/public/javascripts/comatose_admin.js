@@ -4,15 +4,15 @@
 // Author:                Rafael Lima (http://rafael.adm.br)
 // Contributors:          http://rafael.adm.br/css_browser_selector#contributors
 var css_browser_selector = function() {
-  var 
+  var
     ua = navigator.userAgent.toLowerCase(),
     is = function(t){ return ua.indexOf(t) != -1; },
     h = document.getElementsByTagName('html')[0],
     b = (!(/opera|webtv/i.test(ua)) && /msie (\d)/.test(ua)) ? ((is('mac') ? 'ieMac ' : '') + 'ie ie' + RegExp.$1)
       : is('gecko/') ? 'gecko' : is('opera') ? 'opera' : is('konqueror') ? 'konqueror' : is('applewebkit/') ? 'webkit safari' : is('mozilla/') ? 'gecko' : '',
     os = (is('x11') || is('linux')) ? ' linux' : is('mac') ? ' mac' : is('win') ? ' win' : '';
-  var c = b+os+' js'; 
-  h.className = h.className.replace('noscript', '') + h.className?' '+c:c;
+  var c = b+os+' js';
+  h.className = h.className?' '+c:c;
 }();
 
 // List View Functions
@@ -27,7 +27,7 @@ var ComatoseList = {
       ComatoseList.expand_node(node.replace('page_controller_', ''))
     });
   },
-  
+
   toggle_tree_nodes : function(img, id) {
     if(/expanded/.test(img.src)) {
       $('page_list_'+ id).addClassName('collapsed');
@@ -36,6 +36,8 @@ var ComatoseList = {
         var items = ComatoseList._read_state();
         items = items.select(function(id){ return id != img.id; })
         ComatoseList._write_state(items);
+        // Dont request the pages if we are contracting the node...
+        event.stop();
       }
     } else {
       $('page_list_'+ id).removeClassName('collapsed');
@@ -47,17 +49,17 @@ var ComatoseList = {
       }
     }
   },
-  
+
   expand_node: function(id) {
     $('page_list_'+ id).removeClassName('collapsed');
-    $('page_controller_'+ id).src = $('page_controller_'+ id).src.replace(/collapsed/, 'expanded')    
+    $('page_controller_'+ id).src = $('page_controller_'+ id).src.replace(/collapsed/, 'expanded')
   },
-  
+
   collapse_node: function(id) {
     $('page_list_'+ id).addClassName('collapsed');
-    $('page_controller_'+ id).src = $('page_controller_'+ id).src.replace(/expanded/, 'collapsed')    
+    $('page_controller_'+ id).src = $('page_controller_'+ id).src.replace(/expanded/, 'collapsed')
   },
-  
+
   item_hover : function(node, state, is_delete) {
     if( state == 'over') {
       $(node).addClassName( (is_delete) ? 'hover-delete' : 'hover' );
@@ -65,7 +67,7 @@ var ComatoseList = {
       $(node).removeClassName( (is_delete) ? 'hover-delete' : 'hover' );
     }
   },
-  
+
   toggle_reorder: function(node, anc, id) {
     if( $(node).hasClassName('do-reorder') ) {
       $(node).removeClassName( 'do-reorder' );
@@ -79,7 +81,7 @@ var ComatoseList = {
       ComatoseList.expand_node(id);
     }
   },
-  
+
   _write_state: function(items) {
     var cookie = {}; var options = {}; var expiration = new Date();
     cookie[ ComatoseList.state_key ] = items.join(',');
@@ -87,7 +89,7 @@ var ComatoseList = {
     options['expires'] = expiration;
     Cookie.write( cookie, options );
   },
-  
+
   _read_state: function() {
     var state = Cookie.read( ComatoseList.state_key );
     return (state != "" && state != null) ? state.split(',') : [];
@@ -186,15 +188,15 @@ var ComatoseEditForm = {
   },
   cancel : function(url) {
     var current_data = Form.serialize(document.forms[0]);
-    var data_changed = (this.default_data != current_data) 
+    var data_changed = (this.default_data != current_data)
     if(data_changed) {
       if( confirm('Changes detected. You will lose all the updates you have made if you proceed...') ) {
         location.href = url;
       }
     } else {
-      location.href = url;      
+      location.href = url;
     }
-    
+
   }
 }
 
@@ -221,7 +223,7 @@ var Show = {
 // Layout namespace
 var Layout = {};
 
-// This class allows dom objects to stretch with the browser 
+// This class allows dom objects to stretch with the browser
 // (for when a good, cross-browser, CSS approach can't be found)
 Layout.LiquidBase = Class.create();
 // Base class for all Liquid* layouts...
@@ -243,7 +245,7 @@ Object.extend(Layout.LiquidBase.prototype, {
   resize_in: function(timeout) {
     setTimeout( this.on_resize.bind(this), timeout );
   },
-  on_resize: function() {       
+  on_resize: function() {
     // Need to override!
     alert('Override on_resize, please!');
   }
@@ -253,7 +255,7 @@ Object.extend(Layout.LiquidBase.prototype, {
 // Liquid vertical layout
 Layout.LiquidVert = Class.create();
 Object.extend(Layout.LiquidVert.prototype, Object.extend(Layout.LiquidBase.prototype, {
-  on_resize: function() {       
+  on_resize: function() {
     if( this.offset != null && this.enabled ) {
       var new_height = ((window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) - this.offset) +"px";
       this.elems.each(function(e){ $(e).style.height = new_height; })
@@ -265,7 +267,7 @@ Object.extend(Layout.LiquidVert.prototype, Object.extend(Layout.LiquidBase.proto
 // Liquid horizontal layout
 Layout.LiquidHoriz = Class.create();
 Object.extend(Layout.LiquidHoriz.prototype, Object.extend(Layout.LiquidBase.prototype, {
-  on_resize: function() {       
+  on_resize: function() {
     if( this.offset != null && this.enabled ) {
       var new_width = ((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) - this.offset) +"px";
       this.elems.each( function(e){ $(e).style.width = new_width; })
@@ -306,11 +308,11 @@ var ComatoseAJAXSpinner = {
     if($('spinner') && Ajax.activeRequestCount == 0) {
       Effect.Fade('spinner',{duration:0.5,queue:'end'});
     }
-  }  
+  }
 }
 // Register it with Prototype...
 Ajax.Responders.register({
-  onCreate: ComatoseAJAXSpinner.busy, 
+  onCreate: ComatoseAJAXSpinner.busy,
   onComplete: ComatoseAJAXSpinner.notBusy
 });
 
@@ -324,17 +326,17 @@ if(!window.Cookie)
       _each: function(iterator) {
         $H(this.cookies).each(iterator);
       },
-  
+
       getAll: function() {
         this.cookies = {};
         $A(document.cookie.split('; ')).each(function(cookie) {
           var seperator = cookie.indexOf('=');
-          this.cookies[cookie.substring(0, seperator)] = 
+          this.cookies[cookie.substring(0, seperator)] =
               unescape(cookie.substring(seperator + 1, cookie.length));
         }.bind(this));
         return this.cookies;
       },
-  
+
       read: function() {
         var cookies = $A(arguments), results = [];
         this.getAll();
@@ -344,7 +346,7 @@ if(!window.Cookie)
         }.bind(this));
         return results.length > 1 ? results : results[0];
       },
-  
+
       write: function(cookies, options) {
         if (cookies.constructor == Object && cookies.name) cookies = [cookies];
         if (cookies.constructor == Array) {
@@ -360,7 +362,7 @@ if(!window.Cookie)
           }
         }
       },
-  
+
       _write: function(name, value, expires, path, domain) {
         if (name.indexOf('=') != -1) return;
         var cookieString = name + '=' + escape(value);
@@ -369,17 +371,17 @@ if(!window.Cookie)
         if (domain) cookieString += '; domain=' + domain;
         document.cookie = cookieString;
       },
-  
+
       erase: function(cookies) {
         var cookiesToErase = {};
         $A(arguments).each(function(cookie) {
           cookiesToErase[cookie] = '';
         });
-    
+
         this.write(cookiesToErase, {expires: (new Date((new Date()).getTime() - 1e11))});
         this.getAll();
       },
-  
+
       eraseAll: function() {
         this.erase.apply(this, $H(this.getAll()).keys());
       }
@@ -388,14 +390,15 @@ if(!window.Cookie)
     Object.extend(Cookie, {
       get: Cookie.read,
       set: Cookie.write,
-  
+
       add: Cookie.read,
       remove: Cookie.erase,
       removeAll: Cookie.eraseAll,
-  
+
       wipe: Cookie.erase,
       wipeAll: Cookie.eraseAll,
       destroy: Cookie.erase,
       destroyAll: Cookie.eraseAll
     });
   })();
+  Event.observe(window, 'load', function() {document.body.removeClassName("noscript");});
