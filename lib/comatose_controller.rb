@@ -83,10 +83,6 @@ protected
     elsif !params[:index].empty?
       page_name = "#{params[:index]}/#{page_name}"
     end
-    if page_name != ""
-      page_name = "/" << page_name
-    end
-    page_name =  params[:root] << page_name
 
     return page_name, page_ext
   end
