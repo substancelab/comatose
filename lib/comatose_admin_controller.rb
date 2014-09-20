@@ -22,6 +22,7 @@ class ComatoseAdminController < ActionController::Base
     if request.put?
       params[:page][:updated_on] = Time.now
       params[:page][:author] = fetch_author_name
+      @page.attributes = params[:page]
       if @page.save
         expire_cms_page @page
         expire_cms_fragment @page
