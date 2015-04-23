@@ -2,7 +2,6 @@ require 'rake'
 require 'rake/tasklib'
 require 'rake/testtask'
 require 'rdoc/task'
-require 'test/behaviors'
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -12,10 +11,6 @@ Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = false
-end
-
-Behaviors::ReportTask.new :specs do |t|
-  t.pattern = 'test/**/*_test.rb'
 end
 
 desc 'Generate documentation for Comatose.'
