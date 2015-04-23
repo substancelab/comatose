@@ -1,7 +1,7 @@
 require 'rake'
 require 'rake/tasklib'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'test/behaviors'
 
 desc 'Default: run unit tests.'
