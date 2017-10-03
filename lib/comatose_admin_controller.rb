@@ -19,11 +19,10 @@ class ComatoseAdminController < ActionController::Base
     # Clear the page cache for this page... ?
     @page = ComatosePage.find params[:id]
     @root_pages = [fetch_root_page].flatten
-    if request.put?
+    if request.put? || request.patch?
       params[:page][:updated_on] = Time.now
       params[:page][:author] = fetch_author_name
-      @page.attributes = params[:page]
-      if @page.save
+      if @page.update(permitted_params)
         expire_cms_page @page
         expire_cms_fragment @page
         flash[:notice] = "Saved changes to '#{@page.title}'"
@@ -36,7 +35,7 @@ class ComatoseAdminController < ActionController::Base
   def new
     @root_pages = [fetch_root_page].flatten
     if request.post?
-      @page = ComatosePage.new params[:page]
+      @page = ComatosePage.new permitted_params
       @page.author = fetch_author_name
       if @page.save
         flash[:notice] = "Created page '#{@page.title}'"
@@ -99,7 +98,7 @@ class ComatoseAdminController < ActionController::Base
   # Returns a preview of the page content...
   def preview
     begin
-      page = ComatosePage.new(params[:page])
+      page = ComatosePage.new(permitted_params)
       page.author = fetch_author_name
       if params.has_key? :version
         content = page.to_html( {'params'=>params.stringify_keys, 'version'=>params[:version]} )
@@ -366,6 +365,20 @@ protected
   end
 
   private
+
+  def permitted_params
+    params.require(:page).permit(
+      :author,
+      :body,
+      :created_on,
+      :filter_type,
+      :keywords,
+      :parent_id,
+      :slug,
+      :title,
+      :updated_on
+    )
+  end
 
   def page_to_hash(page)
     data = page.attributes.clone
