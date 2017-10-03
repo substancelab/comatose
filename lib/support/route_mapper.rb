@@ -35,14 +35,15 @@ ActionDispatch::Routing::Mapper.class_eval do
   # For mounting the admin
   def comatose_admin( path='comatose_admin', options={} )
     opts = {
-      :controller  => 'comatose_admin',
-      :named_route => 'comatose_admin'
+      :controller  => 'comatose_admin'
     }.merge(options)
     opts[:as] = opts.delete(:named_route)
-		opts[:request_method] = :get
-    match("comatose_admin(/:action(/:id))", opts )
+    opts[:request_method] = :get
 
-
+    post("comatose_admin/new", opts )
+    get("comatose_admin(/:action(/:id))", opts )
+    put("comatose_admin(/:action(/:id))", opts )
+    patch("comatose_admin(/:action(/:id))", opts )
   end
 
     
