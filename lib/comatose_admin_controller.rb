@@ -86,7 +86,7 @@ class ComatoseAdminController < ActionController::Base
   # Deletes the specified page
   def delete
     @page = ComatosePage.find params[:id]
-    if request.post?
+    if request.delete?
       expire_cms_pages_from_bottom @page
       expire_cms_fragments_from_bottom @page
       @page.destroy
