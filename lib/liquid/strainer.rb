@@ -5,7 +5,7 @@ module Liquid
   #
   # One of the strainer's responsibilities is to keep malicious method calls out 
   class Strainer
-    @@required_methods = ["__send__", "__id__", "respond_to?", "extend", "methods"]
+    @@required_methods = [:__send__, :__id__, :respond_to?, :extend, :methods]
     
     @@filters = []
     
@@ -34,6 +34,7 @@ module Liquid
     # remove all standard methods from the bucket so circumvent security 
     # problems 
     instance_methods.each do |m| 
+      puts "undeffing #{m.inspect}"
       unless @@required_methods.include?(m) 
         undef_method m 
       end
