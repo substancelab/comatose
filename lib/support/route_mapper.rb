@@ -44,6 +44,7 @@ ActionDispatch::Routing::Mapper.class_eval do
     get("comatose_admin(/:action(/:id))", opts )
     put("comatose_admin(/:action(/:id))", opts )
     patch("comatose_admin(/:action(/:id))", opts )
+    delete("comatose_admin/delete/:id", opts.merge(:action => :delete))
   end
 
     
