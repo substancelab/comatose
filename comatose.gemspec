@@ -8,7 +8,6 @@ Gem::Specification.new do |s|
   s.rubyforge_project = 'comatose'
   s.homepage = "http://comatose.rubyforge.org"
   s.description = "Comatose is a micro CMS designed for being embedded into existing Rails applications."
-  s.has_rdoc = true
   s.authors = ["M@ McCray"]
   s.bindir = 'bin'
 
