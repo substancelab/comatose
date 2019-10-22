@@ -43,26 +43,7 @@ ActionDispatch::Routing::Mapper.class_eval do
     opts[:request_method] = :get
     opts[:via] = :get
     match("comatose_admin(/:action(/:id))", opts )
-
-
   end
-
-
-#  def method_missing( name, *args, &proc )
-
-    #if name.to_s.starts_with?( 'comatose_' )
-#		if args[-1][:controller].starts_with?('comatose')
-#      opts = (args.last.is_a?(Hash)) ? args.pop : {}
-#      opts[:named_route] = name.to_s #[9..-1]
-#      comatose_root( *(args << opt)  )
-#    else
-#      super unless args.length >= 1 && proc.nil?
-#      @set.add_named_route(name, *args)
-#    end
-#  end
-
-
-
 end
 
 
