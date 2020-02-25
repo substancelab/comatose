@@ -14,7 +14,15 @@
 links = []
 links << link_to('revisions', :action=>'versions', :id=>page)
 links << link_to('add child page', {:action=>'new', :parent=>page}, :title=>"Add a child to '#{page.title}'", :class=>'add-page')
-links << link_to_function('reorder children', "ComatoseList.toggle_reorder('page_list_#{page.id}',this,#{page.id})", :title=>"Reorder children of '#{page.title}'", :class=>'reorder-children', :href=>url_for(:action=>'reorder', :id=>page)) if !page.children.empty? and page.children.length > 1
+links << link_to(
+  'reorder children',
+  url_for(:action => 'reorder', :id => page),
+  {
+    :onclick => "ComatoseList.toggle_reorder('page_list_#{page.id}',this,#{page.id})",
+    :title=>"Reorder children of '#{page.title}'",
+    :class=>'reorder-children'
+  }
+) if !page.children.empty? and page.children.length > 1
 links << link_to('delete', {:action=>'delete', :id=>page}, :data => {:confirm => 'This will delete this page, and any children. Are you sure?'}, :title=>"Delete page '#{page.title}' and all it's children", :class=>'delete-page', :method=>'delete', :onmouseover=>"ComatoseList.item_hover('page_#{page.id}', 'over', true)", :onmouseout=>"ComatoseList.item_hover('page_#{page.id}', 'out', true)") unless @root_pages.include? page
 # Level check, one, two, three...
 collapse_children = (level >= Comatose.config.default_tree_level)
@@ -54,9 +62,17 @@ collapse_children = (level >= Comatose.config.default_tree_level)
     <% end %>
   </ul>
 
-  <%= sortable_element( "page_list_#{page.id}",
-        :complete => visual_effect(:highlight, "page_list_#{page.id}"),
-        :handle=>'handle',
-        :update=>'flash-content',
-        :url => { :action => "reorder", :id=>page } ) if !page.children.empty? and page.children.length > 1 %>
+  <%- if !page.children.empty? and page.children.length > 1 %>
+    <script>
+      Sortable.create(
+        "page_list_#{page.id}",
+        {
+          handle: "handle",
+          onUpdate: "flash-content",
+          onChange: "new Effect.Highlight('page_list_#{page.id}');",
+        }
+      )
+    </script>
+  <%- end %>
 </li>
+
